@@ -3,7 +3,7 @@ const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Users = require('./authHelper')
 
-router.post('/', (req, res) =>
+router.post('/register', (req, res) =>
 {
   if(!req.body.username || !req.body.password)
   {
@@ -17,8 +17,8 @@ router.post('/', (req, res) =>
       bcryptjs.hash(password, salt, function(err, hash)
       {
         password = hash
-        if(!Users.findBy({username}))
-        {
+        // if(!Users.findBy({username}))
+        // {
           Users.add({username, password})
             .then(response =>
               {
@@ -28,8 +28,12 @@ router.post('/', (req, res) =>
               {
                 res.status(500).json({ errorMessage: `Could not register user` })
               })
-        }
-        else res.status(409).json({errorMessage: `That username is already taken`})
+        // }
+        // else 
+        // {
+        //   console.log(Users.find())
+        //   res.status(409).json({errorMessage: `That username is already taken`})
+        // }
       })
     })
   }

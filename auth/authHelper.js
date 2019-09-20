@@ -4,7 +4,13 @@ module.exports =
 {
     findBy,
     add,
-    findById
+    findById,
+    find
+}
+
+function find()
+{
+    return db('users').select('username')
 }
 
 function findBy(filter)
