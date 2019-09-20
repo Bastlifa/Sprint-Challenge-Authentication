@@ -17,15 +17,19 @@ router.post('/', (req, res) =>
       bcryptjs.hash(password, salt, function(err, hash)
       {
         password = hash
-        Users.add({username, password})
-          .then(response =>
-            {
-              res.status(201).json({id: response.id, username: response.username})
-            })
-          .catch(error =>
-            {
-              res.status(500).json({ errorMessage: `Could not register user` })
-            })
+        if(!Users.findBy({username}))
+        {
+          Users.add({username, password})
+            .then(response =>
+              {
+                res.status(201).json({id: response.id, username: response.username})
+              })
+            .catch(error =>
+              {
+                res.status(500).json({ errorMessage: `Could not register user` })
+              })
+        }
+        else res.status(409).json({errorMessage: `That username is already taken`})
       })
     })
   }
