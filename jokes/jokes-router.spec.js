@@ -9,20 +9,24 @@ describe('jokes-router', () => {
     })
     describe('GET /', () =>
     {
-        it('returns jokes if you login first', async () =>
+        it('returns jokes if you login first', () =>
         {
             const user = {username: 'test2', password: 'pass2'}
-            await request(server)
+            return request(server)
                 .post('/api/auth/register')
                 .send(user)
                 .set('Accept', 'application/json')
-            let loginRes = await request(server)
-                .post('/api/auth/login')
-                .send(user)
-                .set('Accept', 'application/json')
-            
-            console.log(`loginRes.body.token: ${loginRes.body.token}`)
-            expect(loginRes.body.token).toBeTruthy()
+                .then(res =>
+                    {
+                        return request(server)
+                        .post('/api/auth/login')
+                        .send(user)
+                        .set('Accept', 'application/json')
+                        .then(res =>
+                            {
+                                expect(res.body.token).toBeTruthy()
+                            })
+                    })
         })
     })
 })
